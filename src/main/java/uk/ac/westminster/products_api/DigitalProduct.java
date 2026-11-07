@@ -1,27 +1,37 @@
 package uk.ac.westminster.products_api;
 
-public class DigitalProduct extends Product {
-
+public class DigitalProduct extends Product implements Discountable {
     private String downloadUrl;
     private double fileSizeMB;
+    private double discountedPrice;
 
-    // no-arg constructor - Jackson needs this to build
-    // an object from an incoming JSON request body
-    public DigitalProduct() {
-    }
+    public DigitalProduct() { }
 
     public DigitalProduct(Long id, String name, double price,
                           String downloadUrl, double fileSizeMB) {
-        super(id, name, price); // MUST be the first statement
+        super(id, name, price);
         this.downloadUrl = downloadUrl;
         this.fileSizeMB = fileSizeMB;
+        this.discountedPrice = price;
     }
 
-    public String getDownloadUrl() {
-        return downloadUrl;
+    // Each product describes itself in its own way
+    @Override
+    public String getSummary() {
+        return "Digital: " + getName() + " | Download: " + downloadUrl;
     }
 
-    public double getFileSizeMB() {
-        return fileSizeMB;
+    // Nothing is posted, so the full discount applies
+    @Override
+    public void applyDiscount(double rate) {
+        this.discountedPrice = getPrice() * (1 - rate);
     }
+
+    @Override
+    public double getDiscountedPrice() {
+        return discountedPrice;
+    }
+
+    public String getDownloadUrl() { return downloadUrl; }
+    public double getFileSizeMB() { return fileSizeMB; }
 }

@@ -45,4 +45,13 @@ public class ProductService {
                 .filter(p -> p.getName().contains(name))
                 .toList();
     }
+    // Ask every product for its summary. Each one answers in its own way.
+    public List<String> getAllSummaries() {
+        List<String> summaries = new ArrayList<>();
+        for (Product p : products) {
+            summaries.add(p.getSummary());
+        }
+        return summaries;
+    }
+
 }
